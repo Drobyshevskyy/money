@@ -46,7 +46,7 @@ Money::Money(int m_pound, int m_shilling, int m_pence) {
 	shilling = m_shilling;
 	pence = m_pence;
 	const int maxpound = 1000000000;
-	if ((pound > maxpound) || (pound < 0)) {
+	if ((pound > maxpound)||(pound<0)) {
 		throw "wrong amount of pounds";
 	}
 	if ((shilling >= 20) || (shilling < 0)) {
@@ -102,39 +102,11 @@ bool Money::operator!=(Money secondmoney) {
 bool Money::operator==(Money secondmoney) {
 	return this->getHalfPenny() == secondmoney.getHalfPenny();
 }
-Money Money::operator + (const Money& secondmoney) const {
-	int aPound = pound, saPound = secondmoney.pound;
-	int aShilling = shilling, saShilling = secondmoney.shilling;
-	int aPence = pence, saPence = secondmoney.pence;
-	if ((pound < 0) && (shilling < 0) && (pence < 0)) {
-		aPound = -pound;
-		aShilling = -shilling;
-		aPence = -pence;
-	}
-	if ((secondmoney.pound < 0) && (secondmoney.shilling < 0) && (secondmoney.pence < 0)) {
-		saPound = -secondmoney.pound;
-		saShilling = -secondmoney.shilling;
-		saPence = -secondmoney.pence;
-	}
-	Money aMoney(aPound + saPound, aShilling + saShilling, aPence + saPence, true);
-	return aMoney;
+Money Money::operator+(const Money& secondmoney) const {
+	return Money (pound + secondmoney.pound, shilling + secondmoney.shilling, pence + secondmoney.pence,true);
 }
-Money Money::operator - (const Money& secondmoney) const {
-	int dPound = pound, sdPound = secondmoney.pound;
-	int dShilling = shilling, sdShilling = secondmoney.shilling;
-	int dPence = pence, sdPence = secondmoney.pence;
-	if ((pound < 0) && (shilling < 0) && (pence < 0)) {
-		dPound = -pound;
-		dShilling = -shilling;
-		dPence = -pence;
-	}
-	if ((secondmoney.pound < 0) && (secondmoney.shilling < 0) && (secondmoney.pence < 0)) {
-		sdPound = -secondmoney.pound;
-		sdShilling = -secondmoney.shilling;
-		sdPence = -secondmoney.pence;
-	}
-	Money dMoney(dPound - sdPound, dShilling - sdShilling, dPence - sdPence, true);
-	return dMoney;
+Money Money::operator-(const Money& secondmoney) const {
+	return Money(pound - secondmoney.pound, shilling - secondmoney.shilling, pence - secondmoney.pence,true);
 }
 Money& Money::operator+=(const Money& secondMoney) {
 	*this = *this + secondMoney;
