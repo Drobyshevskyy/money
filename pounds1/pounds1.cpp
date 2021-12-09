@@ -6,7 +6,7 @@ using namespace std;
 int main()
 {
 	try {
-		Money firstMoney(5, 3, 8), secondMoney(6, 2, 3);
+		Money firstMoney(0, 0, 10), secondMoney(1, 0, 0);
 		Money addition;
 		cout << "amount1 =" << endl;
 		firstMoney.print();

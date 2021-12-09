@@ -2,10 +2,10 @@
 #include <cstdlib>
 #include <iostream>
 using namespace std;
-void Money::setPound(int m_pound) {
+void Money::setPound(int m_pound) { 
 	pound = m_pound;
 }
-int Money::getPound() {
+int Money::getPound() const {
 	if (!positive) {
 		return -pound;
 	}
@@ -14,7 +14,7 @@ int Money::getPound() {
 void Money::setShilling(int m_shilling) {
 	shilling = m_shilling;
 }
-int Money::getShilling() {
+int Money::getShilling() const {
 	if (!positive) {
 		return -shilling;
 	}
@@ -23,7 +23,7 @@ int Money::getShilling() {
 void Money::setPence(int m_pence) {
 	pence = m_pence;
 }
-int Money::getPence() {
+int Money::getPence() const {
 	if (!positive) {
 		return -pence;
 	}
@@ -59,8 +59,8 @@ Money::Money(int m_pound, int m_shilling, int m_pence) {
 		throw "wrong accuracy";
 	}
 }
-double Money::getHalfPenny() {
-	if ((pound > 0) && (shilling > 0) && (pence > 0)) {
+double Money::getHalfPenny() const {
+	if (positive) {
 		return pence * 2 + shilling * 24 + pound * 480;
 	}
 	else {
@@ -71,18 +71,18 @@ void Money::print() {
 	if ((pound == 0) && (shilling == 0) && (pence == 0)) {
 		cout << "0p." << endl;
 	}
-	if (shilling > 0) {
-		shilling %= 20;
-		pound+=(shilling / 20);
-		
-	}
-	if (pence > 0) {
-		pence %= 12;
-		shilling +=(pence / 12);
-	}
+	
 		cout << pound << "pd." << endl;
 		cout << shilling << "sh." << endl;
 		cout << pence << "p." << endl;
+}
+Money Money::transformToMoney(double halfpenny) {
+	pence = ((double)((int)halfpenny % 24) / 2);
+	halfpenny = (int)halfpenny / 24;
+	shilling = ((int)halfpenny % 20);
+	halfpenny = (int)halfpenny / 20;
+	pound = halfpenny;
+	return *this;
 }
 bool Money::operator>(Money secondmoney) {
 	return this->getHalfPenny() > secondmoney.getHalfPenny();
@@ -103,10 +103,16 @@ bool Money::operator==(Money secondmoney) {
 	return this->getHalfPenny() == secondmoney.getHalfPenny();
 }
 Money Money::operator+(const Money& secondmoney) const {
-	return Money (pound + secondmoney.pound, shilling + secondmoney.shilling, pence + secondmoney.pence,true);
+	double hpennies = this->getHalfPenny() + secondmoney.getHalfPenny();
+	Money money;
+	money.transformToMoney(hpennies);
+	return money;
 }
 Money Money::operator-(const Money& secondmoney) const {
-	return Money(pound - secondmoney.pound, shilling - secondmoney.shilling, pence - secondmoney.pence,true);
+	double hpennies = this->getHalfPenny() - secondmoney.getHalfPenny();
+	Money money;
+	money.transformToMoney(hpennies);
+	return money;
 }
 Money& Money::operator+=(const Money& secondMoney) {
 	*this = *this + secondMoney;

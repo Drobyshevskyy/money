@@ -9,14 +9,14 @@ private:
 	bool positive;
 	Money(int, int, int, bool);
 public:
-
+	Money transformToMoney(double);
 	void setPound(int);
-	int getPound();
+	int getPound() const;
 	void setShilling(int);
-	int getShilling();
+	int getShilling() const;
 	void setPence(int);
-	int getPence();
-	double getHalfPenny();
+	int getPence() const;
+	double getHalfPenny() const;
 	void print();
 	Money();
 	Money(int, int, int);
